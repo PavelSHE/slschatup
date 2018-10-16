@@ -1,7 +1,7 @@
 {
     "$schema": "http://json.schemastore.org/proxies",
     "proxies": {
-        "by-file-name": {
+        "filename": {
             "matchCondition": {
                 "route": "public/{file-path}",
                 "methods": [
@@ -10,7 +10,7 @@
             },
             "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/pub?file={file-path}"
         },
-        "default-file": {
+        "default": {
             "matchCondition": {
                 "route": "/",
                 "methods": [
