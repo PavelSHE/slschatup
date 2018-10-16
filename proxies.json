@@ -8,7 +8,7 @@
                     "GET"
                 ]
             },
-            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/public?file={file-path}"
+            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/pub?file={file-path}"
         },
         "default-file": {
             "matchCondition": {
@@ -17,7 +17,7 @@
                     "GET"
                 ]
             },
-            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/public/?file=index.html"
+            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/pub/?file=index.html"
         }
     }
 }
