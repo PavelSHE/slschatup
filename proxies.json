@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "by-file-name": {
+            "matchCondition": {
+                "route": "public/{file-path}",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/public?file={file-path}"
+        },
+        "default-file": {
+            "matchCondition": {
+                "route": "/",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "backendUri": "https://%WEBSITE_SITE_NAME%.azurewebsites.net/api/public/?file=index.html"
+        }
+    }
+}
