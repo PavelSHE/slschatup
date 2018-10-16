@@ -15,18 +15,14 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using System.Collections;
 using Microsoft.Extensions.Primitives;
-using System.Linq;
+
 
 namespace Arc.Function
 {
     public static class tester
     {
-        private static string configurationVariable(string name)
-            => System.Environment.GetEnvironmentVariable(name);
 
-        private static string firstNonEmpty(string[] arr){
-            return arr.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? "";
-        }
+
 
         [FunctionName("tester")]
         public static async Task<IActionResult> Run(
@@ -39,8 +35,8 @@ namespace Arc.Function
             dynamic data = JsonConvert.DeserializeObject(requestBody);
 
 
-            string file = firstNonEmpty(new string[]{req.Query["file"],data?.file,appconfig.defaultFile});
-            string name = firstNonEmpty(new string[]{req.Query["name"],data?.name,"An0nym0us"});
+            string file = HelpFunctions.FirstNonEmpty(new string[]{req.Query["file"],data?.file,appconfig.defaultFile});
+            string name = HelpFunctions.FirstNonEmpty(new string[]{req.Query["name"],data?.name,"An0nym0us"});
 
             Dictionary<string,string> common = new Dictionary<string, string>();
             common.Add("name",name);

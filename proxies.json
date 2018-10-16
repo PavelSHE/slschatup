@@ -3,7 +3,7 @@
     "proxies": {
         "filename": {
             "matchCondition": {
-                "route": "/public/{file-path}",
+                "route": "/pub/{file-path}",
                 "methods": [
                     "GET"
                 ]

@@ -5,6 +5,7 @@
     <RootNamespace>slschatup._2._0</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.22" />
   </ItemGroup>
   <ItemGroup>
