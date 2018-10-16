@@ -15,7 +15,7 @@ namespace Arc.Function
     {
         [FunctionName("pub")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             string relativePath = HelpFunctions.FirstNonEmpty(new string[]{req.Query["file"],appconfig.defaultFile});
