@@ -31,9 +31,7 @@ namespace Arc.Function
 
             
             string file = req.Query["file"];
-            string home = configurationVariable("HOME");
-            string publicFolder = configurationVariable("PUBLICFOLDER");
-
+            
             string name = req.Query["name"];
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
@@ -43,11 +41,10 @@ namespace Arc.Function
             Dictionary<string,string> common = new Dictionary<string, string>();
             common.Add("name",name);
             common.Add("file",file);
-            common.Add("HOME",home);
-            common.Add("PUBLICFOLDER",publicFolder);
+            common.Add("basePath",appconfig.basePath);
 
             string json = JsonConvert.SerializeObject(common, Formatting.Indented);
-            
+
             return (ActionResult)new OkObjectResult(json);
         }
     }
