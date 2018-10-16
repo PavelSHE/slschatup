@@ -8,6 +8,7 @@ namespace Arc.Function
             => System.Environment.GetEnvironmentVariable(name);      
         public static string home = configurationVariable("HOME");
         public static string publicFolder = configurationVariable("PUBLICFOLDER");
+        public static string defaultFile = configurationVariable("DEFAULTFILE");
         public static string basePath = Path.Combine(home,publicFolder);
     }
 }

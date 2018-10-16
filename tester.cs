@@ -13,7 +13,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Collections.Generic;
+using System.Collections;
 using Microsoft.Extensions.Primitives;
+using System.Linq;
 
 namespace Arc.Function
 {
@@ -22,21 +24,23 @@ namespace Arc.Function
         private static string configurationVariable(string name)
             => System.Environment.GetEnvironmentVariable(name);
 
+        private static string firstNonEmpty(string[] arr){
+            return arr.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? "";
+        }
+
         [FunctionName("tester")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Tester triggered");
 
-            
-            string file = req.Query["file"];
-            
-            string name = req.Query["name"];
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-            name = name ?? "An0nym0us";
+
+
+            string file = firstNonEmpty(new string[]{req.Query["file"],data?.file,appconfig.defaultFile});
+            string name = firstNonEmpty(new string[]{req.Query["name"],data?.name,"An0nym0us"});
 
             Dictionary<string,string> common = new Dictionary<string, string>();
             common.Add("name",name);
