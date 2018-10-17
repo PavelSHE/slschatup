@@ -8,26 +8,34 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
+using Newtonsoft.Json.Linq;
+using System.Security.Claims;
+using System.Linq;
+
 namespace Arc.Function
 {
     public static class user
     {
+        //toDo add claims verification thru graph API
+        private static string[] fields = {"ipaddr","name","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"};
+
         [FunctionName("user")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string name = req.Query["name"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+            JObject pJOtClaims = new JObject();
+            foreach(Claim curClaim in  ClaimsPrincipal.Current.Identities.First().Claims)
+            {
+                if (Array.IndexOf(fields,curClaim.Type) >= 0)
+                {   
+                    string key = curClaim.Type.Substring(curClaim.Type.LastIndexOf("/") +1);
+                    pJOtClaims.Add(key, new JValue(curClaim.Value));
+                }
+                log.LogInformation(curClaim.Type + " : " + curClaim.Value);
+            }
+            return (ActionResult)new OkObjectResult(pJOtClaims);
         }
     }
 }
