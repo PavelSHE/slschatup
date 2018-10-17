@@ -17,6 +17,8 @@ using System.Security;
 using System.Web;
 using System.Collections.Specialized;
 using Microsoft.Extensions.Primitives;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Arc.Function
 {
@@ -31,14 +33,29 @@ namespace Arc.Function
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            IDictionary<string, StringValues> d = req.Headers;
-            JObject pJOtClaims = new JObject();
-            foreach (KeyValuePair<string, StringValues> pair in d){
-                log.LogInformation("{0}:{1}",pair.Key,(string)pair.Value);
-                pJOtClaims.Add(pair.Key, new JValue((string)pair.Value));
-            }
+            // IDictionary<string, StringValues> d = req.Headers;
+            // JObject pJOtClaims = new JObject();
+            // foreach (KeyValuePair<string, StringValues> pair in d){
+            //     log.LogInformation("{0}:{1}",pair.Key,(string)pair.Value);
+            //     pJOtClaims.Add(pair.Key, new JValue((string)pair.Value));
+            // }
+            string accessToken = req.Headers["x-ms-token-aad-access-token"];
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await client.GetAsync("https://graph.microsoft.com/v1.0/me");
+            var cont = await response.Content.ReadAsStringAsync();
+    //         var me = JsonConvert.DeserializeObject(cont);
 
-            return (ActionResult)new OkObjectResult(pJOtClaims);
+    //         CloudUserInfo currentUser = new CloudUserInfo();
+    //         currentUser.upn = me.UserPrincipalName;
+    //         ViewData["UserPrincipalName"] = 
+    // ViewData["DisplayName"] = me.DisplayName;
+    // ViewData["Mail"] = me.Mail;
+    // ViewData["me"] = cont;
+ 
+    // return View();
+
+            return (ActionResult)new OkObjectResult(JsonConvert.DeserializeObject(cont));
             // Thread t = Thread.CurrentThread;
             // HttpContext.
             // if (!Thread.CurrentPrincipal.Identity.IsAuthenticated)
