@@ -28,7 +28,8 @@ namespace Arc.Function
                 return new FileContentResult(HelpFunctions.GetFile(serverFilePath), HelpFunctions.GetMimeType(serverFilePath));
             }
             catch{
-                return new BadRequestObjectResult("File not found");
+                BadRequestObjectResult result = new BadRequestObjectResult(404);
+                return result;
             }
             
         }
