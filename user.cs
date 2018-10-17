@@ -42,13 +42,20 @@ namespace Arc.Function
             }
 
             //use AAD Token to Access Graph
-            // string accessToken = req.Headers["x-ms-token-aad-access-token"];
-            // var client = new HttpClient();
-            // client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            // var response = await client.GetAsync("https://graph.microsoft.com/v1.0/me");
-            // var cont = await response.Content.ReadAsStringAsync();
+            try{
+                string accessToken = req.Headers["x-ms-token-aad-access-token"];
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await client.GetAsync("https://graph.microsoft.com/v1.0/me");
+                var cont = await response.Content.ReadAsStringAsync();
+                log.LogInformation(cont);
+                return (ActionResult)new OkObjectResult(cont);
+            }catch{
+                return (ActionResult)new OkObjectResult(JOHeaders);
+            }
+            
 
-            return (ActionResult)new OkObjectResult(JOHeaders);
+            
     //         var me = JsonConvert.DeserializeObject(cont);
 
     //         CloudUserInfo currentUser = new CloudUserInfo();
