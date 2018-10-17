@@ -25,17 +25,26 @@ namespace Arc.Function
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            JObject pJOtClaims = new JObject();
-            foreach(Claim curClaim in  ClaimsPrincipal.Current.Identities.First().Claims)
+            try
             {
-                if (Array.IndexOf(fields,curClaim.Type) >= 0)
-                {   
-                    string key = curClaim.Type.Substring(curClaim.Type.LastIndexOf("/") +1);
-                    pJOtClaims.Add(key, new JValue(curClaim.Value));
-                }
+                JObject pJOtClaims = new JObject();
+            foreach(Claim curClaim in  ClaimsPrincipal.Current.Claims)
+            //ClaimsPrincipal.Current.Identities.First().Claims)
+            {
+                // if (Array.IndexOf(fields,curClaim.Type) >= 0)
+                // {   
+                //     string key = curClaim.Type.Substring(curClaim.Type.LastIndexOf("/") +1);
+                //     pJOtClaims.Add(key, new JValue(curClaim.Value));
+                // }
                 log.LogInformation(curClaim.Type + " : " + curClaim.Value);
             }
-            return (ActionResult)new OkObjectResult(pJOtClaims);
+                return (ActionResult)new OkObjectResult(pJOtClaims);
+            }
+            catch (System.Exception)
+            {
+                return (ActionResult)new OkObjectResult("An0n? is it you?");            
+            }
+            
         }
     }
 }
