@@ -32,11 +32,13 @@ namespace Arc.Function
             ILogger log)
         {
             IDictionary<string, StringValues> d = req.Headers;
+            JObject pJOtClaims = new JObject();
             foreach (KeyValuePair<string, StringValues> pair in d){
                 log.LogInformation("{0}:{1}",pair.Key,(string)pair.Value);
+                pJOtClaims.Add(pair.Key, new JValue((string)pair.Value));
             }
 
-            return (ActionResult)new OkObjectResult("ok");
+            return (ActionResult)new OkObjectResult(pJOtClaims);
             // Thread t = Thread.CurrentThread;
             // HttpContext.
             // if (!Thread.CurrentPrincipal.Identity.IsAuthenticated)
